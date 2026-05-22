@@ -49,6 +49,15 @@ export const googleLogin = async (data) => {
   return response;
 };
 
+// Login
+export const login = async ({ email, password }) => {
+  const response = await api.post('/api/auth/login', { email, password });
+  if (response.data.token) {
+    localStorage.setItem('token', response.data.token);
+  }
+  return response;
+};
+
 // Password reset with OTP
 export const forgotPassword = async (email) => {
   const response = await api.post('/api/auth/forgot-password', { email });

@@ -61,6 +61,29 @@ export const verifyRegistrationOTP = createAsyncThunk(
   }
 );
 
+export const login = createAsyncThunk(
+  'auth/login',
+  async ({ email, password }, { rejectWithValue }) => {
+    try {
+      const response = await API.login({ email, password });
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+      }
+      return {
+        user: response.data.user,
+        token: response.data.token,
+        message: response.data.message
+      };
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message ||
+        error.response?.data?.errors?.[0]?.msg ||
+        error.message ||
+        'Failed to login'
+      );
+    }
+  }
+);
 
 // Google Login Thunk
 export const googleLogin = createAsyncThunk(
@@ -308,6 +331,24 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       
+      // Login
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.error = null;
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
       // Forgot Password
       .addCase(forgotPassword.pending, (state) => {
         state.loading = true;
