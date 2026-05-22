@@ -9,11 +9,11 @@ function Layout() {
   const dispatch = useDispatch();
 console.log('tokennnnnnnnnnnnnnnnnnnnnnnnnnn', user);
 
-  // useEffect(() => {
-  //   if (token) {
-  //     dispatch(getCurrentUser());
-  //   }
-  // }, [dispatch, token]);
+  useEffect(() => {
+    if (token) {
+      dispatch(getCurrentUser());
+    }
+  }, [dispatch, token]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
