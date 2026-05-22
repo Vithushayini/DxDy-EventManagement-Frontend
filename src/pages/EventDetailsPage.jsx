@@ -1,20 +1,30 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { deleteEvent, fetchEventById } from '../store/slices/eventsSlice.js';
-import { toggleBookmark } from '../store/slices/bookmarksSlice.js';
+import { deleteEvent, fetchEventById } from '../Redux/Features/eventsSlice';
+import { fetchBookmarks, toggleBookmark } from '../Redux/Features/bookmarksSlice';
 import { LoadingState } from '../components/StatusBlocks.jsx';
+import { toast } from 'react-toastify';
 
-export function EventDetailsPage() {
+function EventDetailsPage() {
   const { eventId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentEvent } = useSelector((state) => state.events);
+  const { event: currentEvent } = useSelector((state) => state.events);
   const { token, user } = useSelector((state) => state.auth);
+  const bookmarks = useSelector((state) => state.bookmarks.items);
+  const bookmarkIds = useMemo(() => new Set(bookmarks.map((item) => item._id)), [bookmarks]);
+  const isBookmarked = bookmarkIds.has(currentEvent?._id);
 
   useEffect(() => {
     dispatch(fetchEventById(eventId));
   }, [dispatch, eventId]);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchBookmarks());
+    }
+  }, [dispatch, token]);
 
   if (!currentEvent) {
     return <LoadingState label="Loading event details..." />;
@@ -58,10 +68,17 @@ export function EventDetailsPage() {
           {token ? (
             <button
               type="button"
-              onClick={() => dispatch(toggleBookmark(currentEvent._id))}
+              onClick={async () => {
+                const result = await dispatch(toggleBookmark(currentEvent._id));
+                if (toggleBookmark.fulfilled.match(result)) {
+                  toast.success(isBookmarked ? 'Bookmark removed' : 'Bookmarked event');
+                } else {
+                  toast.error(result.payload || 'Unable to update bookmark');
+                }
+              }}
               className="rounded-2xl bg-brand-500 px-5 py-3 font-semibold text-white"
             >
-              Bookmark event
+              {isBookmarked ? 'Remove bookmark' : 'Bookmark event'}
             </button>
           ) : null}
           {currentEvent.location?.mapUrl ? (
@@ -80,3 +97,5 @@ export function EventDetailsPage() {
     </div>
   );
 }
+
+export default EventDetailsPage;

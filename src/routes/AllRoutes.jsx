@@ -33,7 +33,7 @@ function AllRoutes() {
             <Route path="/register" element={<RegisterPage />} />
 
             {/* Public event details */}
-            <Route path="/events/:id" element={<EventDetailsPage />} />
+            <Route path="/events/:eventId" element={<EventDetailsPage />} />
 
             {/* Protected routes */}
             <Route
@@ -61,7 +61,7 @@ function AllRoutes() {
               }
             />
             <Route
-              path="/events/:id/edit"
+              path="/events/:eventId/edit"
               element={
                 <ProtectedRoute>
                   <EditEventPage />

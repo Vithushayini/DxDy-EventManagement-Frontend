@@ -1,25 +1,39 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchMyEvents, deleteEvent } from '../store/slices/eventsSlice.js';
+import { fetchEvents, deleteEvent } from '../Redux/Features/eventsSlice';
+import { fetchBookmarks, toggleBookmark } from '../Redux/Features/bookmarksSlice';
 import { EventCard } from '../components/EventCard.jsx';
 import { EmptyState, LoadingState } from '../components/StatusBlocks.jsx';
+import { toast } from 'react-toastify';
 
-export function ManageEventsPage() {
+function ManageEventsPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items, status } = useSelector((state) => state.events);
+  const { items, loading: status } = useSelector((state) => state.events);
+  const { user, token } = useSelector((state) => state.auth);
+  const bookmarks = useSelector((state) => state.bookmarks.items);
+  const bookmarkIds = useMemo(() => new Set(bookmarks.map((event) => event._id)), [bookmarks]);
 
   useEffect(() => {
-    dispatch(fetchMyEvents());
-  }, [dispatch]);
+    if (user?.id) {
+      dispatch(fetchEvents({ createdBy: user.id }));
+    }
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchBookmarks());
+    }
+  }, [dispatch, token]);
 
   const handleDelete = async (eventId) => {
     if (!confirm('Delete this event? This cannot be undone.')) return;
     const result = await dispatch(deleteEvent(eventId));
     if (deleteEvent.fulfilled.match(result)) {
-      // refresh list
-      dispatch(fetchMyEvents());
+      if (user?.id) {
+        dispatch(fetchEvents({ createdBy: user.id }));
+      }
     }
   };
 
@@ -43,6 +57,16 @@ export function ManageEventsPage() {
           <EventCard
             key={event._id}
             event={event}
+            bookmarked={bookmarkIds.has(event._id)}
+            onToggleBookmark={async () => {
+              const bookmarked = bookmarkIds.has(event._id);
+              const result = await dispatch(toggleBookmark(event._id));
+              if (toggleBookmark.fulfilled.match(result)) {
+                toast.success(bookmarked ? 'Bookmark removed' : 'Bookmarked event');
+              } else {
+                toast.error(result.payload || 'Unable to update bookmark');
+              }
+            }}
             action={
               <div className="flex gap-2">
                 <Link to={`/events/${event._id}/edit`} className="rounded-2xl border border-white/15 px-4 py-2 text-white">
@@ -63,3 +87,5 @@ export function ManageEventsPage() {
     </div>
   );
 }
+
+export default ManageEventsPage;

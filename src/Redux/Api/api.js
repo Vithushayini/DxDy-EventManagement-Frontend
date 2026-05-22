@@ -132,5 +132,42 @@ export const getUserById = async (id) => {
   return response;
 };
 
+// EVENTS API
+export const listEvents = async (query = {}) => {
+  const response = await api.get('/api/events', { params: query });
+  return response;
+};
+
+export const getEventById = async (id) => {
+  const response = await api.get(`/api/events/${id}`);
+  return response;
+};
+
+export const createEvent = async (eventData) => {
+  const response = await api.post('/api/events', eventData);
+  return response;
+};
+
+export const updateEvent = async (id, eventData) => {
+  const response = await api.put(`/api/events/${id}`, eventData);
+  return response;
+};
+
+export const deleteEvent = async (id) => {
+  const response = await api.delete(`/api/events/${id}`);
+  return response;
+};
+
+// BOOKMARKS API (protected)
+export const getBookmarks = async () => {
+  const response = await api.get('/api/bookmarks');
+  return response;
+};
+
+export const toggleBookmark = async (eventId) => {
+  const response = await api.post(`/api/bookmarks/${eventId}`);
+  return response;
+};
+
 
 export default api;

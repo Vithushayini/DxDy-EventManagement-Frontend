@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { createEvent } from '../store/slices/eventsSlice.js';
+import { createEvent } from '../Redux/Features/eventsSlice';
 import { EventForm } from '../components/EventForm.jsx';
 
-export function CreateEventPage() {
+function CreateEventPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,3 +21,4 @@ export function CreateEventPage() {
     </div>
   );
 }
+export default CreateEventPage;

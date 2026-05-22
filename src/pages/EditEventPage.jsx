@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EventForm } from '../components/EventForm.jsx';
-import { fetchEventById, updateEvent } from '../store/slices/eventsSlice.js';
+import { fetchEventById, updateEvent } from '../Redux/Features/eventsSlice';
 import { LoadingState } from '../components/StatusBlocks.jsx';
 
-export function EditEventPage() {
+function EditEventPage() {
   const { eventId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const event = useSelector((state) => state.events.currentEvent);
+  const event = useSelector((state) => state.events.event);
 
   useEffect(() => {
     dispatch(fetchEventById(eventId));
@@ -20,7 +20,7 @@ export function EditEventPage() {
   }
 
   const submit = async (payload) => {
-    const result = await dispatch(updateEvent({ eventId, payload }));
+    const result = await dispatch(updateEvent({ id: eventId, data: payload }));
     if (updateEvent.fulfilled.match(result)) {
       navigate(`/events/${result.payload._id}`);
     }
@@ -50,3 +50,4 @@ export function EditEventPage() {
     </div>
   );
 }
+export default EditEventPage;

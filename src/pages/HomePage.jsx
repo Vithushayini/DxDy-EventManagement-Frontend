@@ -1,19 +1,52 @@
-import { useEffect } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { fetchEvents } from '../store/slices/eventsSlice.js';
+import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchEvents } from '../Redux/Features/eventsSlice';
+import { fetchBookmarks, toggleBookmark } from '../Redux/Features/bookmarksSlice';
 import { EventFilters } from '../components/EventFilters.jsx';
 import { EventCard } from '../components/EventCard.jsx';
 import { EmptyState, LoadingState } from '../components/StatusBlocks.jsx';
+import { toast } from 'react-toastify';
 
 function HomePage() {
-  // const dispatch = useDispatch();
-  // const { items, status } = useSelector((state) => state.events);
-  const items = [];
-  const status = 'idle';
+  const dispatch = useDispatch();
+  const { items, loading: status } = useSelector((state) => state.events);
+  const { token } = useSelector((state) => state.auth);
+  const bookmarks = useSelector((state) => state.bookmarks.items);
+  const bookmarkIds = useMemo(
+    () => new Set(bookmarks.map((event) => event._id)),
+    [bookmarks]
+  );
 
-  // useEffect(() => {
-  //   dispatch(fetchEvents());
-  // }, [dispatch]);
+  useEffect(() => {
+    // initial load
+    dispatch(fetchEvents());
+  }, [dispatch]);
+
+  // filters state and debounced fetch
+  const [filters, setFilters] = useState({ search: '', category: '', city: '', country: '' });
+  const debounceRef = useRef(null);
+
+  const applyFilters = useCallback((nextFilters) => {
+    // build query with only present values
+    const query = Object.entries(nextFilters || {}).reduce((acc, [k, v]) => {
+      if (v && v.toString().trim() !== '') acc[k] = v;
+      return acc;
+    }, {});
+    dispatch(fetchEvents(query));
+  }, [dispatch]);
+
+  const handleFiltersChange = useCallback((nextFilters) => {
+    setFilters(nextFilters);
+    // debounce
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => applyFilters(nextFilters), 400);
+  }, [applyFilters]);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchBookmarks());
+    }
+  }, [dispatch, token]);
 
   return (
     <div className="space-y-6">
@@ -27,7 +60,7 @@ function HomePage() {
         </p>
       </section>
 
-      <EventFilters />
+      <EventFilters initialFilters={filters} onChange={handleFiltersChange} />
 
       {status === 'loading' ? <LoadingState /> : null}
 
@@ -37,7 +70,20 @@ function HomePage() {
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {items.map((event) => (
-          <EventCard key={event._id} event={event} />
+          <EventCard
+            key={event._id}
+            event={event}
+            bookmarked={bookmarkIds.has(event._id)}
+            onToggleBookmark={async () => {
+              const bookmarked = bookmarkIds.has(event._id);
+              const result = await dispatch(toggleBookmark(event._id));
+              if (toggleBookmark.fulfilled.match(result)) {
+                toast.success(bookmarked ? 'Bookmark removed' : 'Bookmarked event');
+              } else {
+                toast.error(result.payload || 'Unable to update bookmark');
+              }
+            }}
+          />
         ))}
       </div>
     </div>
