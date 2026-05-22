@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
 import { Link, Outlet, NavLink } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import { loadCurrentUser, logout } from '../store/slices/authSlice.js';
+import { getCurrentUser,logout } from '../Redux/Features/authSlice'
 
 function Layout() {
-  // const { user, token } = useSelector((state) => state.auth);
-  // const dispatch = useDispatch();
-  const user = null;
-  const token = null;
+  const { user, token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+console.log('tokennnnnnnnnnnnnnnnnnnnnnnnnnn', user);
 
   // useEffect(() => {
   //   if (token) {
-  //     dispatch(loadCurrentUser());
+  //     dispatch(getCurrentUser());
   //   }
   // }, [dispatch, token]);
 
@@ -42,7 +42,7 @@ function Layout() {
                   // onClick={() => dispatch(logout())}
                   className="rounded-full border border-white/15 px-4 py-2 text-white transition hover:border-brand-400 hover:text-brand-300"
                 >
-                  {/* {user?.name || 'Logout'} */}kk
+                  {user?.name || 'Logout'}
                 </button>
               </>
             ) : (

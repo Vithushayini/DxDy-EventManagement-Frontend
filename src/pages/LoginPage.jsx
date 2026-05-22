@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
-// import { 
-//   sendRegistrationOTP,
-//   verifyRegistrationOTP,
-//   sendLoginOTP,
-//   verifyLoginOTP,
-//   forgotPassword,
-//   resetPassword,
-//   clearError,
-//   resetOTPState,
-//   googleLogin
-// } from '../Redux/Features/authSlice';
+import { 
+  // sendRegistrationOTP,
+  // verifyRegistrationOTP,
+  // forgotPassword,
+  // resetPassword,
+  // clearError,
+  // resetOTPState,
+  googleLogin
+} from '../Redux/Features/authSlice';
+import { toast } from 'react-toastify';
 // import { loginUser } from '../store/slices/authSlice.js';
 
 function LoginPage() {
@@ -23,22 +22,17 @@ function LoginPage() {
   const [isGoogleLogin, setIsGoogleLogin] = useState(false);
   const [googleToastShown, setGoogleToastShown] = useState(false); // Track if Google toast has been shown
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   // const { status, error } = useSelector((state) => state.auth);
-  //   const { 
-  //   loading, 
-  //   error: authError, 
-  //   otpSent, 
-  //   tempEmail,
-  //   isAuthenticated 
-  // } = useSelector((state) => state.auth);
-    const isAuthenticated = false; // Placeholder until we connect to Redux
-    const error = null; // Placeholder until we connect to Redux
-    const loading = false; // Placeholder until we connect to Redux
+    const { 
+    loading, 
+    error, 
+    otpSent, 
+    tempEmail,
+    isAuthenticated 
+  } = useSelector((state) => state.auth);
     
-
-  const status = 'idle';
 
   const submit = async (event) => {
     event.preventDefault();
@@ -53,9 +47,9 @@ function LoginPage() {
     try {
       setIsGoogleLogin(true);
       
-      // await dispatch(googleLogin({
-      //   credential: credentialResponse.credential
-      // })).unwrap();
+      await dispatch(googleLogin({
+        credential: credentialResponse.credential
+      })).unwrap();
       
       // Don't show any success toast here - will be handled by useEffect
     } catch (error) {
@@ -105,7 +99,7 @@ function LoginPage() {
           }
         });
         setTimeout(() => {
-          navigate('/user');
+          navigate('/');
         }, 2000);
       }
     }
