@@ -7,7 +7,7 @@ import { getCurrentUser,logout } from '../Redux/Features/authSlice'
 function Layout() {
   const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-console.log('tokennnnnnnnnnnnnnnnnnnnnnnnnnn', user);
+console.log('userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', user);
 
   useEffect(() => {
     if (token) {
