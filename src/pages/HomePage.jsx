@@ -48,6 +48,16 @@ function HomePage() {
     }
   }, [dispatch, token]);
 
+  // derive available categories and countries from loaded events
+  const categories = useMemo(() => {
+    const s = new Set(items.map((it) => it.category).filter(Boolean));
+    return Array.from(s).sort();
+  }, [items]);
+  const countries = useMemo(() => {
+    const s = new Set(items.map((it) => it.location?.country).filter(Boolean));
+    return Array.from(s).sort();
+  }, [items]);
+
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-brand-900 via-slate-900 to-slate-950 p-8 shadow-glow">
@@ -60,7 +70,13 @@ function HomePage() {
         </p>
       </section>
 
-      <EventFilters initialFilters={filters} onChange={handleFiltersChange} />
+      <EventFilters
+        initialFilters={filters}
+        onChange={handleFiltersChange}
+        categories={categories}
+        countries={countries}
+        loading={status === 'loading'}
+      />
 
       {status === 'loading' ? <LoadingState /> : null}
 

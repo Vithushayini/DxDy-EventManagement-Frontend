@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { EventForm } from '../components/EventForm.jsx';
 import { fetchEventById, updateEvent } from '../Redux/Features/eventsSlice';
@@ -10,6 +11,10 @@ function EditEventPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const event = useSelector((state) => state.events.event);
+  const items = useSelector((state) => state.events.items);
+
+  const categories = useMemo(() => Array.from(new Set(items.map((it) => it.category).filter(Boolean))).sort(), [items]);
+  const countries = useMemo(() => Array.from(new Set(items.map((it) => it.location?.country).filter(Boolean))).sort(), [items]);
 
   useEffect(() => {
     dispatch(fetchEventById(eventId));
@@ -46,6 +51,9 @@ function EditEventPage() {
           city: event.location?.city,
           country: event.location?.country
         }}
+        categories={categories}
+        countries={countries}
+        loadingOptions={items.length === 0}
       />
     </div>
   );

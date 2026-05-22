@@ -15,9 +15,14 @@ const defaultForm = {
   country: ''
 };
 
-export function EventForm({ initialValues, onSubmit, submitLabel }) {
+export function EventForm({ initialValues, onSubmit, submitLabel, categories = [], countries = [], loadingOptions = false }) {
   const mergedValues = useMemo(() => ({ ...defaultForm, ...initialValues }), [initialValues]);
   const [form, setForm] = useState(mergedValues);
+
+  const defaultCategories = ['Conference', 'Meetup', 'Workshop', 'Webinar', 'Hackathon'];
+  const defaultCountries = ['Sri Lanka', 'India', 'Pakistan', 'Bangladesh', 'Nepal'];
+  const mergedCategories = Array.from(new Set([...(categories || []), ...defaultCategories]));
+  const mergedCountries = Array.from(new Set([...(countries || []), ...defaultCountries]));
 
   const update = (field) => (event) => setForm((current) => ({ ...current, [field]: event.target.value }));
 
@@ -48,7 +53,10 @@ export function EventForm({ initialValues, onSubmit, submitLabel }) {
     <form onSubmit={handleSubmit} className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-6">
       <div className="grid gap-4 md:grid-cols-2">
         <input value={form.title} onChange={update('title')} placeholder="Event title" className="input" />
-        <input value={form.category} onChange={update('category')} placeholder="Category" className="input" />
+        <select value={form.category} onChange={update('category')} className="input" disabled={loadingOptions}>
+          <option value="">Select category</option>
+          {loadingOptions ? <option>Loading...</option> : mergedCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+        </select>
       </div>
       <textarea value={form.description} onChange={update('description')} placeholder="Description" className="input min-h-40" />
       <div className="grid gap-4 md:grid-cols-2">
@@ -66,7 +74,10 @@ export function EventForm({ initialValues, onSubmit, submitLabel }) {
       </div>
       <div className="grid gap-4 md:grid-cols-2">
         <input value={form.city} onChange={update('city')} placeholder="City" className="input" />
-        <input value={form.country} onChange={update('country')} placeholder="Country" className="input" />
+        <select value={form.country} onChange={update('country')} className="input" disabled={loadingOptions}>
+          <option value="">Select country</option>
+          {loadingOptions ? <option>Loading...</option> : mergedCountries.map((c) => <option key={c} value={c}>{c}</option>)}
+        </select>
       </div>
       <button type="submit" className="rounded-2xl bg-brand-500 px-5 py-3 font-semibold text-white transition hover:bg-brand-400">
         {submitLabel}
