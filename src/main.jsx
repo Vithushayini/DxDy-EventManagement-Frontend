@@ -30,7 +30,7 @@
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider, useDispatch } from 'react-redux'
-// import { store } from './Redux/Store/store'
+import { store } from './Redux/Store/store'
 import './index.css'
 import AllRoutes from './routes/AllRoutes'
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -38,8 +38,8 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
-// const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-// console.log('Google Client ID:', GOOGLE_CLIENT_ID);
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+console.log('Google Client ID:', GOOGLE_CLIENT_ID);
 
 
 function AppInitializer() {
@@ -57,9 +57,9 @@ function AppInitializer() {
 }
 
 createRoot(document.getElementById('root')).render(
-  //  <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+   <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
   <StrictMode>
-    {/* <Provider store={store}> */}
+    <Provider store={store}>
       <AppInitializer />
       <ToastContainer
         position="top-right"
@@ -69,7 +69,7 @@ createRoot(document.getElementById('root')).render(
         draggable
         pauseOnHover
       />
-    {/* </Provider> */}
+    </Provider>
   </StrictMode>
-// </GoogleOAuthProvider>
+ </GoogleOAuthProvider>
 );
