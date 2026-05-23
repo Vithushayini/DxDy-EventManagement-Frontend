@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
+import { IoEye, IoEyeOff } from "react-icons/io5";
 import {
   login,
   forgotPassword,
@@ -439,7 +440,7 @@ function LoginPage() {
                     onClick={() => togglePasswordVisibility('new')}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary-1 focus:outline-none"
                   >
-                    <span className="text-lg">{showNewPassword ? '👁️' : '🙈'}</span>
+                    <span className="text-lg">{showNewPassword ? <IoEye /> : <IoEyeOff />}</span>
                   </button>
                 </div>
                 {newPassword && (
@@ -486,7 +487,8 @@ function LoginPage() {
                     onClick={() => togglePasswordVisibility('confirmNew')}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary-1 focus:outline-none"
                   >
-                    <span className="text-lg">{showConfirmNewPassword ? '👁️' : '🙈'}</span>
+                    <span className="text-lg">{showConfirmNewPassword ? <IoEye /> : <IoEyeOff />}</span>
+                    
                   </button>
                 </div>
                 {errors.confirmNewPassword && (
@@ -628,7 +630,7 @@ function LoginPage() {
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="absolute right-3 top-1/2 z-20 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
               >
-                <span className="text-xl">{showPassword ? '👁️' : '🙈'}</span>
+                <span className="text-xl">{showPassword ? <IoEye /> : <IoEyeOff />}</span>
               </button>
             </div>
             {(errors.form || authError) ? (

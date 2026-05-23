@@ -21,9 +21,13 @@ function EditEventPage() {
     dispatch(fetchEventById(eventId));
   }, [dispatch, eventId]);
 
-  if (!event) {
-    return <LoadingState label="Loading editor..." />;
-  }
+  // if (!event) {
+  //   return <LoadingState label="Loading editor..." />;
+  // }
+
+  if (!event || event._id !== eventId) {
+  return <LoadingState label="Loading editor..." />;
+}
 
   const submit = async (payload) => {
     const result = await dispatch(updateEvent({ id: eventId, data: payload }));

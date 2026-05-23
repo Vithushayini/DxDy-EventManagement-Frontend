@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { IoEye, IoEyeOff } from "react-icons/io5";
 import { changePassword, logout } from '../Redux/Features/authSlice';
 
 function ChangePasswordPage() {
@@ -84,7 +85,8 @@ function ChangePasswordPage() {
               onClick={() => setShowCurrentPassword((prev) => !prev)}
               className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-slate-400 hover:text-white focus:outline-none"
             >
-              <span className="text-xl">{showCurrentPassword ? '👁️' : '🙈'}</span>
+              {/* <span className="text-xl">{showCurrentPassword ? '👁️' : '🙈'}</span> */}
+              <span className="text-xl">{showCurrentPassword ? <IoEye /> : <IoEyeOff />}</span>
             </button>
           </div>
           {errors.currentPassword && (
@@ -113,7 +115,7 @@ function ChangePasswordPage() {
               onClick={() => setShowNewPassword((prev) => !prev)}
               className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-slate-400 hover:text-white focus:outline-none"
             >
-              <span className="text-xl">{showNewPassword ? '👁️' : '🙈'}</span>
+              <span className="text-xl">{showNewPassword ? <IoEye /> : <IoEyeOff />}</span>
             </button>
           </div>
           {errors.newPassword && (
@@ -142,7 +144,8 @@ function ChangePasswordPage() {
               onClick={() => setShowConfirmNewPassword((prev) => !prev)}
               className="absolute right-3 top-1/2 z-10 -translate-y-1/2 text-slate-400 hover:text-white focus:outline-none"
             >
-              <span className="text-xl">{showConfirmNewPassword ? '👁️' : '🙈'}</span>
+              {/* <span className="text-xl">{showConfirmNewPassword ? '👁️' : '🙈'}</span> */}
+              <span className="text-xl">{showConfirmNewPassword ? <IoEye /> : <IoEyeOff />}</span>
             </button>
           </div>
           {errors.confirmNewPassword && (
