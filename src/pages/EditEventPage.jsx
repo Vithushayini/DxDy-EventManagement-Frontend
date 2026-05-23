@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { EventForm } from '../components/EventForm.jsx';
 import { fetchEventById, updateEvent } from '../Redux/Features/eventsSlice';
 import { LoadingState } from '../components/StatusBlocks.jsx';
+import { toast } from 'react-toastify';
 
 function EditEventPage() {
   const { eventId } = useParams();
@@ -27,7 +28,10 @@ function EditEventPage() {
   const submit = async (payload) => {
     const result = await dispatch(updateEvent({ id: eventId, data: payload }));
     if (updateEvent.fulfilled.match(result)) {
+      toast.success('Event updated successfully!');
       navigate(`/events/${result.payload._id}`);
+    } else {
+      toast.error(result.payload || 'Failed to update event');
     }
   };
 
@@ -42,8 +46,10 @@ function EditEventPage() {
           description: event.description,
           category: event.category,
           organizer: event.organizer,
-          startDate: event.startDate?.slice(0, 16),
-          endDate: event.endDate?.slice(0, 16),
+          startDate: event.startDate || '',
+          startTime: event.startTime || '',
+          endDate: event.endDate || '',
+          endTime: event.endTime || '',
           imageUrl: event.imageUrl,
           tags: event.tags?.join(', '),
           locationName: event.location?.name,

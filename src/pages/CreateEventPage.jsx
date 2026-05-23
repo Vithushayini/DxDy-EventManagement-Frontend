@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createEvent } from '../Redux/Features/eventsSlice';
 import { EventForm } from '../components/EventForm.jsx';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 function CreateEventPage() {
   const dispatch = useDispatch();
@@ -12,7 +13,10 @@ function CreateEventPage() {
   const submit = async (payload) => {
     const result = await dispatch(createEvent(payload));
     if (createEvent.fulfilled.match(result)) {
+      toast.success('Event created successfully!');
       navigate(`/events/${result.payload._id}`);
+    } else {
+      toast.error(result.payload || 'Failed to create event');
     }
   };
 

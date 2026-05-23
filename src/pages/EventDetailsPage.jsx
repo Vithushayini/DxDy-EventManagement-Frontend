@@ -5,6 +5,7 @@ import { deleteEvent, fetchEventById } from '../Redux/Features/eventsSlice';
 import { fetchBookmarks, toggleBookmark } from '../Redux/Features/bookmarksSlice';
 import { LoadingState } from '../components/StatusBlocks.jsx';
 import { toast } from 'react-toastify';
+import { formatDateForDisplay, formatTimeForDisplay } from '../utils/dateUtils.js';
 
 function EventDetailsPage() {
   const { eventId } = useParams();
@@ -36,7 +37,10 @@ function EventDetailsPage() {
   const handleDelete = async () => {
     const result = await dispatch(deleteEvent(eventId));
     if (deleteEvent.fulfilled.match(result)) {
+      toast.success('Event deleted successfully');
       navigate('/');
+    } else {
+      toast.error('Failed to delete event');
     }
   };
 
@@ -63,6 +67,20 @@ function EventDetailsPage() {
             <dt className="text-slate-500">Country</dt>
             <dd>{currentEvent.location?.country || 'N/A'}</dd>
           </div>
+          <div>
+            <dt className="text-slate-500">Start Date & Time</dt>
+            <dd>
+              {formatDateForDisplay(currentEvent.startDate)} at {formatTimeForDisplay(currentEvent.startTime)}
+            </dd>
+          </div>
+          {currentEvent.endDate && currentEvent.endTime && (
+            <div>
+              <dt className="text-slate-500">End Date & Time</dt>
+              <dd>
+                {formatDateForDisplay(currentEvent.endDate)} at {formatTimeForDisplay(currentEvent.endTime)}
+              </dd>
+            </div>
+          )}
         </dl>
         <div className="mt-6 flex flex-wrap gap-3">
           {token ? (
@@ -71,7 +89,7 @@ function EventDetailsPage() {
               onClick={async () => {
                 const result = await dispatch(toggleBookmark(currentEvent._id));
                 if (toggleBookmark.fulfilled.match(result)) {
-                  toast.success(isBookmarked ? 'Bookmark removed' : 'Bookmarked event');
+                  toast.success(isBookmarked ? 'Bookmark removed' : 'Event bookmarked');
                 } else {
                   toast.error(result.payload || 'Unable to update bookmark');
                 }

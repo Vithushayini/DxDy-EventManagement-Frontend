@@ -28,7 +28,7 @@ function Layout() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      <header className="border-b border-white/10 bg-slate-950/90 backdrop-blur">
+      <header className="fixed top-0 left-0 z-50 w-full border-b border-white/10 bg-slate-950/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <Link to="/" className="text-lg font-semibold tracking-tight text-white">
             SmartEventX
@@ -122,7 +122,7 @@ function Layout() {
           </nav>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-7xl px-4 py-8 pt-28 sm:px-6 lg:px-8">
         <Outlet />
       </main>
     </div>
