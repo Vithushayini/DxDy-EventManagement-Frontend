@@ -35,7 +35,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }) {
   const [form, setForm] = useState(mergedValues);
   const [errors, setErrors] = useState(defaultErrors);
 
-  const defaultCategories = ['Conference', 'Meetup', 'Workshop', 'Webinar','Seminar', 'Hackathon'];
+  const defaultCategories = ['Conference', 'Meetup', 'Workshop', 'Webinar', 'Seminar', 'Hackathon'];
   const defaultCountries = ['Sri Lanka', 'India', 'Pakistan', 'Bangladesh', 'Nepal'];
   // const mergedCategories = Array.from(new Set([...(categories || []), ...defaultCategories]));
   // const mergedCountries = Array.from(new Set([...(countries || []), ...defaultCountries]));
@@ -51,6 +51,12 @@ export function EventForm({ initialValues, onSubmit, submitLabel }) {
   const validate = () => {
     const newErrors = {};
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const startDate = new Date(form.startDate);
+    const endDate = new Date(form.endDate);
+
     if (!form.title.trim()) newErrors.title = 'Event title is required';
     if (!form.description.trim()) newErrors.description = 'Description is required';
     if (!form.category) newErrors.category = 'Category is required';
@@ -59,6 +65,27 @@ export function EventForm({ initialValues, onSubmit, submitLabel }) {
     if (!form.startTime) newErrors.startTime = 'Start time is required';
     if (!form.locationName.trim()) newErrors.locationName = 'Venue name is required';
     if (!form.country) newErrors.country = 'Country is required';
+
+    // ❌ Past date check
+    if (form.startDate && startDate < today) {
+      newErrors.startDate = 'Start date cannot be in the past';
+    }
+
+    // ❌ End date before start date
+    if (form.endDate) {
+      if (endDate < startDate) {
+        newErrors.endDate = 'End date must be after start date';
+      }
+
+      // ❌ Same day time validation
+      if (form.startDate === form.endDate) {
+        if (form.endTime && form.startTime) {
+          if (form.endTime <= form.startTime) {
+            newErrors.endTime = 'End time must be after start time';
+          }
+        }
+      }
+    }
 
     return newErrors;
   };
@@ -168,6 +195,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }) {
               type="date"
               value={form.startDate}
               onChange={update('startDate')}
+              min={form.startDate || new Date().toISOString().split('T')[0]}
               className={`input ${errors.startDate ? 'border-red-500' : ''}`}
             />
             {errors.startDate && <p className="mt-1 text-sm text-red-400">{errors.startDate}</p>}
@@ -192,6 +220,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }) {
             type="date"
             value={form.endDate}
             onChange={update('endDate')}
+            min={form.startDate}
             className="input"
           />
           <input
@@ -201,6 +230,12 @@ export function EventForm({ initialValues, onSubmit, submitLabel }) {
             className="input"
           />
         </div>
+        {errors.endDate && (
+          <p className="mt-1 text-sm text-red-400">{errors.endDate}</p>
+        )}
+        {errors.endTime && (
+          <p className="mt-1 text-sm text-red-400">{errors.endTime}</p>
+        )}
       </div>
 
       <input
