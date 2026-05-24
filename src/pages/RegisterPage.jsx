@@ -8,6 +8,7 @@ import {
   verifyRegistrationOTP,
   googleLogin,
 } from '../Redux/Features/authSlice';
+import { IoEye, IoEyeOff } from 'react-icons/io5';
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ function RegisterPage() {
   const otpInputsRef = useRef([]);
   const [canResend, setCanResend] = useState(true);
   const [resendTimer, setResendTimer] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (otpSent) {
@@ -137,7 +139,21 @@ function RegisterPage() {
           <form onSubmit={handleSubmit} className="mt-6 grid gap-4">
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" className="input" />
             <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="input" />
-            <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" type="password" className="input" />
+            <div className="relative">
+            <input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              type={showPassword ? 'text' : 'password'}
+              className="input" />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 z-20 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none"
+            >
+              <span className="text-xl">{showPassword ? <IoEye /> : <IoEyeOff />}</span>
+            </button>
+            </div>
             {error ? <p className="text-sm text-red-300">{error}</p> : null}
             <button className="rounded-2xl bg-brand-500 px-5 py-3 font-semibold text-white" type="submit" disabled={loading}>
               {loading ? 'Sending OTP...' : 'Create account'}
@@ -189,7 +205,7 @@ function RegisterPage() {
                 onChange={(e) => handleOtpChange(idx, e.target.value)}
                 onKeyDown={(e) => handleOtpKeyDown(idx, e)}
                 onPaste={handleOtpPaste}
-                className="w-12 h-12 text-center text-xl font-semibold border-2 rounded-xl"
+                className="w-11 h-11 md:w-12 md:h-12 text-center text-xl font-semibold border-2 rounded-xl"
               />
             ))}
           </div>

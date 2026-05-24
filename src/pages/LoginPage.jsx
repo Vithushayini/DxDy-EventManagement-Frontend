@@ -277,8 +277,8 @@ function LoginPage() {
               Back to login
             </button>
 
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Reset Password</h2>
-            <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-200 mb-2">Reset Password</h2>
+            <p className="text-sm md:text-base text-gray-500 mb-4 md:mb-6">
               Enter your email address and we'll send you an OTP.
             </p>
 
