@@ -14,9 +14,6 @@ function EditEventPage() {
   const event = useSelector((state) => state.events.event);
   const items = useSelector((state) => state.events.items);
 
-  const categories = useMemo(() => Array.from(new Set(items.map((it) => it.category).filter(Boolean))).sort(), [items]);
-  const countries = useMemo(() => Array.from(new Set(items.map((it) => it.location?.country).filter(Boolean))).sort(), [items]);
-
   useEffect(() => {
     dispatch(fetchEventById(eventId));
   }, [dispatch, eventId]);
@@ -61,9 +58,6 @@ function EditEventPage() {
           city: event.location?.city,
           country: event.location?.country
         }}
-        categories={categories}
-        countries={countries}
-        loadingOptions={items.length === 0}
       />
     </div>
   );

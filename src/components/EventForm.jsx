@@ -30,15 +30,15 @@ const defaultErrors = {
   country: ''
 };
 
-export function EventForm({ initialValues, onSubmit, submitLabel, categories = [], countries = [], loadingOptions = false }) {
+export function EventForm({ initialValues, onSubmit, submitLabel }) {
   const mergedValues = useMemo(() => ({ ...defaultForm, ...initialValues }), [initialValues]);
   const [form, setForm] = useState(mergedValues);
   const [errors, setErrors] = useState(defaultErrors);
 
-  const defaultCategories = ['Conference', 'Meetup', 'Workshop', 'Webinar', 'Hackathon'];
+  const defaultCategories = ['Conference', 'Meetup', 'Workshop', 'Webinar','Seminar', 'Hackathon'];
   const defaultCountries = ['Sri Lanka', 'India', 'Pakistan', 'Bangladesh', 'Nepal'];
-  const mergedCategories = Array.from(new Set([...(categories || []), ...defaultCategories]));
-  const mergedCountries = Array.from(new Set([...(countries || []), ...defaultCountries]));
+  // const mergedCategories = Array.from(new Set([...(categories || []), ...defaultCategories]));
+  // const mergedCountries = Array.from(new Set([...(countries || []), ...defaultCountries]));
 
   const update = (field) => (event) => {
     setForm((current) => ({ ...current, [field]: event.target.value }));
@@ -121,10 +121,11 @@ export function EventForm({ initialValues, onSubmit, submitLabel, categories = [
             value={form.category}
             onChange={update('category')}
             className={`input ${errors.category ? 'border-red-500' : ''}`}
-            disabled={loadingOptions}
+          // disabled={loadingOptions}
           >
             <option value="">Select category</option>
-            {loadingOptions ? <option>Loading...</option> : mergedCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+            {defaultCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+            {/* {loadingOptions ? <option>Loading...</option> : mergedCategories.map((c) => <option key={c} value={c}>{c}</option>)} */}
           </select>
           {errors.category && <p className="mt-1 text-sm text-red-400">{errors.category}</p>}
         </div>
@@ -212,7 +213,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel, categories = [
       {/* <LocationSearch
         value={form.locationName} 
         onChange={update('locationName')}/> */}
-        
+
       <LocationSearch
         onSelect={(location) => {
           setForm((prev) => ({
@@ -254,10 +255,11 @@ export function EventForm({ initialValues, onSubmit, submitLabel, categories = [
             value={form.country}
             onChange={update('country')}
             className={`input ${errors.country ? 'border-red-500' : ''}`}
-            disabled={loadingOptions}
+          // disabled={loadingOptions}
           >
             <option value="">Select country</option>
-            {loadingOptions ? <option>Loading...</option> : mergedCountries.map((c) => <option key={c} value={c}>{c}</option>)}
+            {defaultCountries.map((c) => <option key={c} value={c}>{c}</option>)}
+            {/* {loadingOptions ? <option>Loading...</option> : mergedCountries.map((c) => <option key={c} value={c}>{c}</option>)} */}
           </select>
           {errors.country && <p className="mt-1 text-sm text-red-400">{errors.country}</p>}
         </div>
