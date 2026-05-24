@@ -1,135 +1,3 @@
-// import { useEffect, useState } from 'react';
-// import { Link, Outlet, NavLink, useNavigate } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { toast } from 'react-toastify';
-// import { getCurrentUser, logout } from '../Redux/Features/authSlice';
-
-// function Layout() {
-//   const { user, token } = useSelector((state) => state.auth);
-//   const dispatch = useDispatch();
-//   const navigate = useNavigate();
-//   const [profileOpen, setProfileOpen] = useState(false);
-
-//   useEffect(() => {
-//     if (token) {
-//       dispatch(getCurrentUser());
-//     }
-//   }, [dispatch, token]);
-
-//   const handleLogout = async () => {
-//     try {
-//       await dispatch(logout()).unwrap();
-//     } catch (err) {
-//       // ignore; state clears even if backend logout fails
-//     }
-//     toast.success('Logged out successfully.');
-//     navigate('/');
-//   };
-
-//   return (
-//     <div className="min-h-screen bg-slate-950 text-slate-100">
-//       <header className="fixed top-0 left-0 z-50 w-full border-b border-white/10 bg-slate-950/90 backdrop-blur">
-//         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-//           <Link to="/" className="text-lg font-semibold tracking-tight text-white">
-//             SmartEventX
-//           </Link>
-//           <nav className="flex items-center gap-3 text-sm text-slate-300">
-//             <NavLink to="/" className="hover:text-white">
-//               Events
-//             </NavLink>
-//             {token ? (
-//               <>
-//                 <NavLink to="/bookmarks" className="hover:text-white">
-//                   Bookmarks
-//                 </NavLink>
-//                 <NavLink to="/events/new" className="hover:text-white">
-//                   Create Event
-//                 </NavLink>
-//                 <NavLink to="/manage" className="hover:text-white">
-//                   Manage Events
-//                 </NavLink>
-//                 <button
-//                   type="button"
-//                   onClick={() => setProfileOpen((prev) => !prev)}
-//                   className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-sm font-semibold text-white transition hover:bg-brand-400"
-//                   aria-label="Open profile menu"
-//                 >
-//                   {user?.name ? user.name.slice(0, 2).toUpperCase() : 'U'}
-//                 </button>
-//                 <button
-//                   type="button"
-//                   onClick={handleLogout}
-//                   className="rounded-full border border-white/15 px-4 py-2 text-white transition hover:border-brand-400 hover:text-brand-300"
-//                 >
-//                   Logout
-//                 </button>
-//                 <div className="relative">
-//                   {profileOpen && (
-//                     <div className="absolute right-0 top-12 z-20 w-72 overflow-hidden rounded-2xl border border-white/10 bg-slate-950 p-4 shadow-xl">
-//                       <div className="mb-3 flex items-center gap-3">
-//                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 text-lg font-semibold text-white">
-//                           {user?.name ? user.name.slice(0, 2).toUpperCase() : 'U'}
-//                         </div>
-//                         <div>
-//                           <p className="text-sm font-semibold text-white">{user?.name || 'User'}</p>
-//                           <p className="text-xs text-slate-400">{user?.email || 'No email available'}</p>
-//                         </div>
-//                       </div>
-//                       <button
-//                         type="button"
-//                         onClick={() => {
-//                           setProfileOpen(false);
-//                           navigate('/profile');
-//                         }}
-//                         className="mb-2 w-full rounded-full border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-white hover:bg-white/10"
-//                       >
-//                         Change email
-//                       </button>
-//                       <button
-//                         type="button"
-//                         onClick={() => {
-//                           setProfileOpen(false);
-//                           navigate('/change-password');
-//                         }}
-//                         className="mb-3 w-full rounded-full border border-white/10 bg-white/5 px-3 py-2 text-left text-sm text-white hover:bg-white/10"
-//                       >
-//                         Change password
-//                       </button>
-//                       <button
-//                         type="button"
-//                         onClick={handleLogout}
-//                         className="w-full rounded-full bg-brand-500 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-400"
-//                       >
-//                         Log out
-//                       </button>
-//                     </div>
-//                   )}
-//                 </div>
-//               </>
-//             ) : (
-//               <>
-//                 <NavLink to="/login" className="hover:text-white">
-//                   Login
-//                 </NavLink>
-//                 <NavLink
-//                   to="/register"
-//                   className="rounded-full bg-brand-500 px-4 py-2 font-medium text-white transition hover:bg-brand-400"
-//                 >
-//                   Register
-//                 </NavLink>
-//               </>
-//             )}
-//           </nav>
-//         </div>
-//       </header>
-//       <main className="mx-auto max-w-7xl px-4 py-8 pt-28 sm:px-6 lg:px-8">
-//         <Outlet />
-//       </main>
-//     </div>
-//   );
-// }
-// export default Layout;
-
 import { useEffect, useState, useRef } from 'react';
 import { Link, Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -371,15 +239,15 @@ function Layout() {
           </nav>
 
           <div className="flex items-center gap-4">
-              {token && (
-                <button
-                  ref={mobileProfileBtnRef}
-                  onClick={() => setProfileOpen((p) => !p)}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-white md:hidden"
-                >
-                  {user?.name ? user.name.slice(0, 2).toUpperCase() : 'U'}
-                </button>
-              )}
+            {token && (
+              <button
+                ref={mobileProfileBtnRef}
+                onClick={() => setProfileOpen((p) => !p)}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-white md:hidden"
+              >
+                {user?.name ? user.name.slice(0, 2).toUpperCase() : 'U'}
+              </button>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -463,9 +331,37 @@ function Layout() {
         )}
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-8 pt-20 lg:pt-28 sm:px-6 lg:px-8">
+      <main className="mx-auto flex-1 max-w-7xl px-4 py-8 pt-20 lg:pt-28 sm:px-6 lg:px-8">
         <Outlet />
       </main>
+
+      <footer className="border-t border-white/10 bg-slate-950 z-50 bottom-0 right-0 left-0 w-full text-slate-400 md:fixed">
+        <div className="mx-auto max-w-7xl px-4 py-2 sm:px-6 lg:px-8">
+
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+
+            {/* Brand */}
+            <div className="gap-2 hidden md:flex">
+              <h2 className="text-lg font-bold text-transparent bg-gradient-to-r from-brand-400 via-cyan-400 to-brand-500 bg-clip-text">
+                SmartEventX
+              </h2>
+              <p className="mt-1 text-sm text-slate-400">
+                Modern event planning made simple.
+              </p>
+            </div>
+            <p className="text-xs text-slate-500">
+              © {new Date().getFullYear()} SmartEventX. All rights reserved.
+            </p>
+            <p className="text-xs text-slate-500 hidden md:inline">
+              Built with React + Node + MongoDB 🚀
+            </p>
+
+          </div>
+
+
+
+        </div>
+      </footer>
     </div>
   );
 }
