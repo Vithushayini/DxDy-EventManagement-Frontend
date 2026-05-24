@@ -16,20 +16,33 @@ function ManageEventsPage() {
   const bookmarkIds = useMemo(() => new Set(bookmarks.map((event) => event._id)), [bookmarks]);
 
   const [deleteId, setDeleteId] = useState(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  const selectedEvent = items.find((e) => e._id === deleteId);
+  // Filter items to only show events created by the current user (safety check)
+  const userEvents = useMemo(() => {
+    return items.filter((event) => event.createdBy === user?.id);
+  }, [items, user?.id]);
+
+  const selectedEvent = userEvents.find((e) => e._id === deleteId);
 
   useEffect(() => {
     if (user?.id) {
+      setIsInitialLoad(true);
       dispatch(fetchEvents({ createdBy: user.id }));
     }
-  }, [dispatch, user]);
+  }, [dispatch, user?.id]);
 
   useEffect(() => {
     if (token) {
       dispatch(fetchBookmarks());
     }
   }, [dispatch, token]);
+
+  useEffect(() => {
+    if (isInitialLoad && status !== 'loading') {
+      setIsInitialLoad(false);
+    }
+  }, [status, isInitialLoad]);
 
   const handleDelete = async (eventId) => {
     if (!confirm('Delete this event? This cannot be undone.')) return;
@@ -41,9 +54,9 @@ function ManageEventsPage() {
     }
   };
 
-  if (status === 'loading') return <LoadingState />;
+  if (isInitialLoad || status === 'loading') return <LoadingState />;
 
-  if (items.length === 0) {
+  if (userEvents.length === 0) {
     return <EmptyState title="No events" description="You have not created any events yet." />;
   }
 
@@ -77,7 +90,7 @@ function ManageEventsPage() {
       </div>
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {items.map((event) => (
+        {userEvents.map((event) => (
           <EventCard
             key={event._id}
             event={event}
