@@ -74,14 +74,6 @@ export const resetPassword = async ({ email, otp, newPassword }) => {
   return response;
 };
 
-// Token management
-export const refreshToken = async () => {
-  const response = await api.post('/api/auth/refresh-token');
-  if (response.data.token) {
-    localStorage.setItem('token', response.data.token);
-  }
-  return response;
-};
 
 export const logout = async () => {
   try {

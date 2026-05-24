@@ -159,9 +159,6 @@ function Layout() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
 
           {/* Logo */}
-          {/* <Link to="/" className="text-lg font-semibold text-white">
-            SmartEventX
-          </Link> */}
           <Link
             to="/"
             className="text-xl font-extrabold tracking-wide text-transparent bg-gradient-to-r from-brand-400 via-cyan-400 to-brand-500 bg-clip-text drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]"
@@ -176,12 +173,6 @@ function Layout() {
             {token && (
               <>
                 {/* Profile button */}
-                {/* <button
-                  onClick={() => setProfileOpen((p) => !p)}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-white"
-                >
-                  {user?.name ? user.name.slice(0, 2).toUpperCase() : 'U'}
-                </button> */}
                 <div className="relative">
                   <button
                     ref={desktopProfileBtnRef}
@@ -269,17 +260,6 @@ function Layout() {
 
               {token && (
                 <>
-                  {/* <button
-                    onClick={() => {
-                      setProfileOpen(true);
-                      setMobileOpen(false);
-                      navigate('/profile');
-                    }}
-                    className="text-left hover:text-white"
-                  >
-                    Profile
-                  </button> */}
-
                   <button
                     onClick={() => {
                       setMobileOpen(false);
@@ -331,7 +311,7 @@ function Layout() {
         )}
       </header>
 
-      <main className="mx-auto flex-1 max-w-7xl px-4 py-8 pt-20 lg:pt-28 sm:px-6 lg:px-8">
+      <main className="mx-auto flex-1 max-w-7xl px-4 py-8 pt-20 md:pb-16 lg:pt-28 sm:px-6 lg:px-8">
         <Outlet />
       </main>
 

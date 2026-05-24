@@ -148,23 +148,6 @@ export const resetPassword = createAsyncThunk(
   }
 );
 
-// Token Management
-export const refreshToken = createAsyncThunk(
-  'auth/refreshToken',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await API.refreshToken();
-      return { token: response.data.token };
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message ||
-        error.message ||
-        'Failed to refresh token'
-      );
-    }
-  }
-);
-
 export const logout = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
@@ -375,26 +358,6 @@ const authSlice = createSlice({
       .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-      
-      // Refresh Token
-      .addCase(refreshToken.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(refreshToken.fulfilled, (state, action) => {
-        state.loading = false;
-        state.token = action.payload.token;
-        state.error = null;
-      })
-      .addCase(refreshToken.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-        state.isAuthenticated = false;
-        state.user = null;
-        state.token = null;
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
       })
       
       // Logout
