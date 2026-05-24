@@ -846,102 +846,61 @@ Protected Routes:
 ##  Future Improvements
 
 ### **Feature Enhancements**
-
-1. **Event Recommendations Engine**
-   - ML-based recommendations based on user browsing/bookmark history
-   - Personalized event feed
-
-2. **Real-time Notifications**
-   - WebSocket integration for real-time event updates
-   - Push notifications when bookmarked events are about to start
-
-3. **Event Ticketing System**
-   - Ticket generation and management
-   - QR code-based check-in system
-   - Payment integration (Stripe/PayPal)
-
-4. **Calendar Integration**
-   - Export events to Google Calendar, Outlook
-   - iCal format support
-
-5. **User Reviews & Ratings**
-   - Rate events after attending
-   - User-generated reviews
-   - Average rating display
-
-6. **Event Analytics**
-   - Organizer dashboard with event statistics
-   - Attendee engagement metrics
-   - Traffic and conversion analytics
-
-
-7. **Event Series/Recurring Events**
-   - Support for recurring events (weekly, monthly, etc.)
-   - Series management for organizers
+# Event Recommendations
+- Suggest events based on user interests and bookmarked events
+- Show more relevant events on the homepage
+# Real-time Notifications
+- Notify users about event updates or changes
+- Remind users when bookmarked events are near starting time
+# Event Ticketing System
+- Add simple ticket generation for events
+- QR code-based check-in (optional future feature)
+- Basic payment integration in future
+# Calendar Integration
+- Allow users to add events to Google Calendar
+- Export events in iCal format
+# Reviews and Ratings
+- Allow users to rate and review events after attending
+- Show average rating for each event
+# Organizer Dashboard Analytics
+- Simple analytics for event views and bookmarks
+- Help organizers understand engagement
+# Recurring Events
+- Support weekly or monthly repeating events
+- Easier management for repeated events
 
 ---
 
 ### **Scalability Improvements**
 
-1. **Database Optimization**
-   - Implement connection pooling for MongoDB
-   - Add read replicas for high-traffic queries
-   - Implement database sharding by geography
-   - **Impact**: 10x query performance improvement
-
-2. **Caching Layer**
-   - Redis for frequently accessed data (popular events, categories)
-   - Cache query results for expensive filters
-   - Cache user bookmarks
-   - **Impact**: 50% reduction in database load
-
-3. **Content Delivery**
-   - CDN for static assets and images
-   - Implement CloudFlare for DDoS protection
-   - Geographic distribution of assets
-   - **Impact**: 70% faster load times globally
-
-4. **Horizontal Scaling**
-   - Load balancer for multiple backend instances
-   - Docker containerization for easy deployment
-   - Kubernetes orchestration for auto-scaling
-   - **Impact**: Handle 10x user growth
-
-5. **Search Optimization**
-   - Implement Elasticsearch for full-text search
-   - Fuzzy search for typo tolerance
-   - Search autocomplete/suggestions
-   - **Impact**: Sub-second search response times
-
-6. **Session Management**
-   - Redis-based session store
-   - Distributed session handling
-   - **Impact**: Support multiple backend instances
+# Database Optimization
+- Add proper indexing for faster event searches
+- Optimize MongoDB queries
+- Improve pagination for large event datasets
+# Caching
+- Use Redis to cache frequently accessed events and bookmarks
+- Reduce repeated database queries
+- Better Search Functionality
+- Add advanced search and filtering
+- Implement autocomplete suggestions for events and locations
+# Backend Scaling
+- Deploy multiple backend instances using Docker
+- Add a load balancer for handling more users
 
 ---
 
 ### **Security Enhancements**
 
-1. **API Rate Limiting**
-   - Implement rate limiting by IP/user
-   - Prevent brute force attacks
-   - Prevent API scraping
-   - **Tool**: express-rate-limit
-
-2. **Input Sanitization**
-   - Sanitize all user inputs to prevent XSS
-   - SQL/NoSQL injection prevention
-   - **Tool**: DOMPurify, Joi schema validation
-
-3. **HTTPS Everywhere**
-   - Force HTTPS on all connections
-   - Implement HSTS headers
-   - SSL certificate management
-
-
-5. **Two-Factor Authentication (2FA)**
-   - TOTP/SMS-based 2FA option
-   - Backup codes for recovery
+# API Rate Limiting
+- Limit number of requests per user/IP to prevent abuse
+- Helps avoid brute force attacks and API spam
+# Input Validation & Sanitization
+- Validate all user inputs on both frontend and backend
+- Prevent XSS and injection-based attacks
+# Secure Communication
+- Protect data during transmission
+# Authentication Improvements
+- add two-factor authentication for extra security
 
 ## Assumptions
 - All users have a valid email address for OTP verification
